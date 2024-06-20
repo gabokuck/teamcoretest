@@ -1,9 +1,21 @@
-import {Text, View} from 'react-native';
+import React from 'react';
+import { useSplashScreenTimer } from '../../hooks/useSplashScreenTimer';
+import { SplashScreen } from '../splash/SplashScreen';
+import { QuestionsScreen } from '../questions/QuestionsScreen';
 
 export const HomeScreen = () => {
+
+  const { isLoading } = useSplashScreenTimer();
+
+
   return (
-    <View>
-      <Text>Home Screen</Text>
-    </View>
-  );
+  <>
+      {
+      isLoading
+      ?(<SplashScreen/>)
+      :(<QuestionsScreen/>)
+    }
+  
+  </>
+  )
 };
