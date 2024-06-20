@@ -23,10 +23,8 @@ export const ImageTitle = ({text, safe = false, white = false}: Props) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    flex: 1,
     justifyContent: 'flex-start',
-    width: '100%',
-    height: '100%',
+    paddingBottom: 20
   },
   text: {
     color: colors.primary,

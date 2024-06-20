@@ -8,7 +8,11 @@ export class QuestionMapper {
         return {
             question_id: data.question_id,
             question: data.question,
-            answers: data.answers.map((a) => a)
+            answers: data.answers.map((a) => { return {
+                questions_id: data.question_id,
+                answer: a.answer,
+                answer_id: a.answer_id
+            }})
         }
 }
 }
