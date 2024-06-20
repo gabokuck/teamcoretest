@@ -2,6 +2,8 @@ import React from 'react';
 import {ImageTitle} from '../../components/ui/ImageTitle';
 import {
   ActivityIndicator,
+  Button,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,18 +11,28 @@ import {
 } from 'react-native';
 import {QuestionItem} from '../../components/questions/QuestionItem';
 import {useQuery} from '@tanstack/react-query';
-import {getQuestions} from '../../../actions/questions';
-import {colors} from '../../../config/theme/theme';
+import {getQuestions, sendAnswers} from '../../../actions/questions';
+import {colors, globalStyles} from '../../../config/theme/theme';
+import {useAnswerStore} from '../../stores/useAnswersStore';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../../navigator/StackNavigator';
 
 export const QuestionsScreen = () => {
-  const {isLoading, data = []} = useQuery({
+  // Carga la data y la guarda en cache
+  const {isLoading, data = [], refetch} = useQuery({
     queryKey: ['questions'],
     queryFn: () => getQuestions(),
     staleTime: 1000 * 60 * 60,
   });
 
+  // Obtenemos el estado de las preguntas
+  const {answers, reset} = useAnswerStore();
+
+  // Navigator
+  const navigation = useNavigation<any>();
+
   return (
-    <ScrollView contentContainerStyle={{flex: 1}}>
+    <ScrollView>
       <View style={styles.container}>
         <ImageTitle safe text="Tenemos un par de preguntas para tí" />
 
@@ -38,6 +50,31 @@ export const QuestionsScreen = () => {
             />
           ))
         )}
+
+        {isLoading ? (
+          <></>
+        ) : data.length === 0 ? (
+          <Text></Text>
+        ) : (
+          <Pressable
+            disabled={answers.length !== data.length}
+            style={{
+              ...globalStyles.btnPrimary,
+              ...(answers.length === data.length
+                ? {backgroundColor: colors.primary, colors: 'red'}
+                : {backgroundColor: 'grey', colors: 'black'}),
+            }}
+            onPress={async() => {
+              const resp = await sendAnswers(answers);
+              if(resp){
+                navigation.navigate('RepeatQuestionsScreen')
+                reset();
+              }
+              
+            }}>
+            <Text style={globalStyles.btnPrimaryText}>Finalizar</Text>
+          </Pressable>
+        )}
       </View>
     </ScrollView>
   );
@@ -45,7 +82,6 @@ export const QuestionsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
   },
   text: {
     color: colors.primary,

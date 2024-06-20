@@ -42,9 +42,12 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     alignItems: 'center',
+    marginHorizontal: 40,
+    marginTop: 15,
+    marginBottom: 30
   },
   btnPrimaryText: {
-    color: colors.text,
+    color: colors.buttonTextColor,
     fontSize: 16,
   },
 });

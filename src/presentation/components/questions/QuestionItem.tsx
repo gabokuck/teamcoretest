@@ -54,7 +54,6 @@ export const QuestionItem = ({questions, index, isLast = false}: Props) => {
             </Pressable>
           ))}
         </View>
-        {/* <View style={styles.dividerStyles}></View> */}
       </View>
       {!isLast && <Separator />}
     </>
